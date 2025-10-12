@@ -1,6 +1,6 @@
 import { animation_duration, eventSource, event_types, getThumbnailUrl } from '../../../../script.js';
 import { power_user } from '../../../power-user.js';
-import { retriggerFirstMessageOnEmptyChat, getUserAvatar, getUserAvatars, setUserAvatar, user_avatar } from '../../../personas.js';
+import { getUserAvatar, getUserAvatars, setUserAvatar, user_avatar } from '../../../personas.js';
 import { Popper } from '../../../../lib.js';
 
 /** @type {Popper.Instance} */
@@ -54,11 +54,10 @@ async function openQuickPersonaSelector() {
         const isDefault = userAvatar === power_user.default_persona;
         const listItem = $('<li tabindex="0" class="list-group-item interactable"><img class="quickPersonaMenuImg"/></li>');
         listItem.find('img').attr('src', imgUrl).attr('title', imgTitle).toggleClass('selected', isSelected).toggleClass('default', isDefault);
-        listItem.on('click', () => {
+        listItem.on('click', async () => {
             closeQuickPersonaSelector();
-            setUserAvatar(userAvatar);
+            await setUserAvatar(userAvatar);
             changeQuickPersona();
-            retriggerFirstMessageOnEmptyChat();
         });
         quickPersonaList.find('ul').append(listItem);
     }
